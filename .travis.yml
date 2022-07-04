@@ -1,0 +1,23 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t yusuf/docker-react -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true yusuf/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "Containerization"
+  env: "Containerization-env"
+  bucket_name: "elasticbeanstalk-us-east-1-971902593315"
+  bucket_path: "Containerization"
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
